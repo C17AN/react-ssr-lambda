@@ -8,6 +8,7 @@ This solution can only be provisioned in the us-east-1 Region as it deploys Lamb
 ![alt](images/LambdaSSR-Architecture.png)
 
 ## Requirements
+
 - Node.js 12.x
 - AWS CDK 1.72+
 - Configured aws credentials
@@ -15,51 +16,63 @@ This solution can only be provisioned in the us-east-1 Region as it deploys Lamb
 
 ## Folder structure
 
-- /cdk - code to deploy the solution 
+- /cdk - code to deploy the solution
 - /simple-ssr - React application created with the create-react-app tool.
 
-
 ## Deployment
+
 - Clone git repository
 
-    `git clone https://github.com/aws-samples/react-ssr-lambda.git`
+  `git clone https://github.com/aws-samples/react-ssr-lambda.git`
 
 - Run the following commands in your terminal window, provide the name of the S3 bucket instead of `<your bucket name>`, for example `mybucket`, to deploy the static content
 
-    `cd react-ssr-lambda`
+### 1. Build Application
 
-    `cd ./cdk`
+`cd react-ssr-lambda`
 
-    `npm install`
+`cd ./simple-ssr`
 
-    `npm run build`
+`npm install`
 
-    `cdk bootstrap`
+`npm run build`
 
-    `cdk deploy SSRApiStack --outputs-file ../simple-ssr/src/config.json`
+> Error: Can't resolve './config.json' Error will be resolved on next step.
 
-    `cd ../simple-ssr`
+### 2. Deploy CDK Stack
 
-    `npm install`
+`cd ../cdk`
 
-    `npm run build-all`
+`npm install`
 
-    `cd ../cdk`
+`npm run build`
 
-    `cdk deploy SSRAppStack --parameters mySiteBucketName=<your bucket name>`
+`cdk bootstrap`
+
+`cdk deploy SSRApiStack --outputs-file ../simple-ssr/src/config.json`
+
+### 3. Deploy Application Stack
+
+`cd ../simple-ssr`
+
+`npm run build-all`
+
+`cd ../cdk`
+
+`cdk deploy SSRAppStack --parameters mySiteBucketName=<your bucket name>`
 
 - After successful deployment you will see output variables
 
-    **CF URL** - for React App stored on S3 and rendered on client
+  **CF URL** - for React App stored on S3 and rendered on client
 
-    **Lambda SSR URL** - for React App rendered by Lambda behind API Gateway
+  **Lambda SSR URL** - for React App rendered by Lambda behind API Gateway
 
-    **Lambda@Edge SSR URL** - for React App rendered by Lambda@Edge
+  **Lambda@Edge SSR URL** - for React App rendered by Lambda@Edge
 
 - To clean-up the reated resources run
 
-    `cd ./cdk`
+  `cd ./cdk`
 
-    `cdk destroy SSRApiStack`
-    
-    `cdk destroy SSRAppStack`
+  `cdk destroy SSRApiStack`
+
+  `cdk destroy SSRAppStack`
